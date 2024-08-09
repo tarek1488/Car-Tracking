@@ -1,0 +1,17 @@
+*.pt
+*.mp4
+*.zip
+*.rar
+*.avi
+*.json
+/.venv
+/runs
+/data
+/labels
+/images
+/whole-data
+/input_videos
+/output
+/test
+/pycococreator
+/labels
