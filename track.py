@@ -9,15 +9,15 @@ output_path = "output"
 os.makedirs(output_path, exist_ok=True)
 
 # Initialize the model
-#model = YOLO(r"best (1).pt")
+#model = YOLO(r"best (2).pt")
 model = YOLO('yolov8s-seg.pt')
 
 # Capture video
-cap = cv2.VideoCapture("input_videos/in4.mp4")
+cap = cv2.VideoCapture("input_videos/in1.mp4")
 w, h, fps = (int(cap.get(x)) for x in (cv2.CAP_PROP_FRAME_WIDTH, cv2.CAP_PROP_FRAME_HEIGHT, cv2.CAP_PROP_FPS))
 
 # Initialize video writer
-out = cv2.VideoWriter(os.path.join(output_path, "out4-before.avi"), cv2.VideoWriter_fourcc(*"MJPG"), fps, (w, h))
+out = cv2.VideoWriter(os.path.join(output_path, "out1-2.avi"), cv2.VideoWriter_fourcc(*"MJPG"), fps, (w, h))
 
 # Initialize track history (although not used in this script, can be useful for debugging or future needs)
 track_history = defaultdict(lambda: [])
@@ -29,7 +29,7 @@ while True:
         break
 
     annotator = Annotator(im0, line_width=2)
-    results = model.track(im0, persist=True)
+    results = model.track(im0, persist=True,classes = 2)
 
     if results[0].boxes.id is not None and results[0].masks is not None:
         masks = results[0].masks.xy
