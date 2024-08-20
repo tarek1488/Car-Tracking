@@ -18,7 +18,7 @@ image = image[y1:y2, x1:x2, :]
 gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 
-result = reader.readtext(gray_image)
+result = reader.readtext(gray_image, detail=0)
 print(result)
 cv2.imwrite('plate-test.jpg',image)
 cv2.imshow('frame',gray_image)

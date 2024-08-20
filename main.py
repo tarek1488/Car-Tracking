@@ -5,7 +5,8 @@ import random
 from tracker import Tracker 
 import numpy as np
 import easyocr
-
+from utils import *
+video_data = {}
 input_video =  r'input_videos\in6.mp4'
 
 capture = cv2.VideoCapture(input_video)
@@ -23,8 +24,10 @@ reader = easyocr.Reader(['en'], gpu=False)
 #generate 10 random colors for boxes
 color = [(random.randint(0,255), random.randint(0,255), random.randint(0,255)) for j in range(10)]
 
+frame_num = -1
 #looping through video frames
 while True:
+    frame_num += 1
     ret, frame = capture.read()
     
     #detect cars in frames
@@ -40,52 +43,33 @@ while True:
         x1, y1, x2, y2, score, class_id = r
         x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
         car_detections.append([x1, y1, x2, y2, score])    
+    
     #update tracker to make tracker track cars in the whole video
     tracker.update(frame, np.array(car_detections))
     
     for r in plate_results[0].boxes.data.tolist():
         #gathering data for tracking
         x1, y1, x2, y2, score, class_id = r
-        x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-        cv2.rectangle(frame, (x1,y1), (x2,y2), color[2], 3)
-        #plate_detections.append([x1, y1, x2, y2])
-        plate = frame[y1:y2, x1:x2, :]
-        gray_plate = cv2.cvtColor(plate, cv2.COLOR_BGR2GRAY)
-        plate_text = reader.readtext(plate, detail=0)
-        if len(plate_text) != 0:
-            txt = plate_text[0]
-            with open('out.txt', 'a') as file:
-                file.write(txt + "\n")
+        #assign plate to car
+        car_data =  assign_plate_to_car(r[0:4], tracker.tracks)
         
-        
-        
-    
+        if car_data != -1:
+            #cropping plates
+            plate = frame[int(y1):int(y2), int(x1):int(x2), :]
+            x1_car, y1_car, x2_car, y2_car = car_data.bbox
+            #converting plate to grayscale
+            gray_plate = cv2.cvtColor(plate, cv2.COLOR_BGR2GRAY)
+            #reading text from plate
+            plate_text = reader.readtext(gray_plate, detail=0)
+            if len(plate_text) != 0:
+                video_data[frame_num][car_data.track_id] = {'car' : {'bbox': [int(x1_car), int(y1_car), int(x2_car), int(y2_car)]},
+                                                            'licence plate': {'bbox':[int(x1), int(y1), int(x2), int(y2)],
+                                                                              'text': plate_text[0]}}
     if not ret:
         print(f'Video {input_video} has ended')
         break
     
-    #cv2.imshow('frame',frame)
-    cv2.waitKey(10)
-    
-    # key = cv2.waitKey(0)
-    
-    # if key == ord('q'):
-    #     # 'q' to quit
-    #     break
-    # elif key == ord('n'):
-    #     # 'n' to show the next frame
-    #     continue
-    # elif key == ord('s'):
-    #     # 's' to save the current frame
-    #     cv2.imwrite('saved_frame.png', frame)
-    #     print("Frame saved as 'saved_frame.png'.")
-    
-    #cv2.waitKey(int(capture.get(cv2.CAP_PROP_FPS)))
-    
-    # if cv2.waitKey(1) & 0xFF == ord("q"):
-    #     print("Video processing interrupted by user.")
-    #     break
-
 # Release resources
 capture.release()
 cv2.destroyAllWindows()
+print(video_data)
