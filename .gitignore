@@ -5,7 +5,6 @@
 *.avi
 *.json
 *.csv
-*.txt
 /.venv
 /runs
 /input_videos
