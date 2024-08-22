@@ -60,7 +60,7 @@ This project focuses on detecting and tracking cars along with their plate numbe
 
 You can watch a demonstration of the project in action below:
 
-[![Car Tracking with Plate Number Detector](https://youtu.be/FRM_TJaJS7M/0.jpg)](https://youtu.be/FRM_TJaJS7M)
+[![Car Tracking with Plate Number Detector](Capture.png)](https://youtu.be/FRM_TJaJS7M)
 
 ## Contributing
 
