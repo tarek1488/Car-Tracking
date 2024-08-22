@@ -4,12 +4,14 @@
 *.rar
 *.avi
 *.json
+*.csv
+*.txt
 /.venv
 /runs
 /input_videos
 /output
 /pycococreator
-/plate-detector
+/plate-detector/train-results
 /model_data
 /__pycache__
 /deep_sort

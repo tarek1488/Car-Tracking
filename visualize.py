@@ -31,7 +31,7 @@ def draw_border(img, top_left, bottom_right, plate_number, color=(0, 255, 0), th
     return img
 
 
-results = pd.read_csv('out_full.csv')
+results = pd.read_csv('out_full.txt', sep="," ,  encoding='ISO-8859-1')
 
 # Load video
 video_path = r'input_videos\in6.mp4'
@@ -90,8 +90,8 @@ while ret:
         
         out.write(frame)
         frame = cv2.resize(frame, (1280, 720))
-        if frame_nmr == 1010:
-            break
+        # if frame_nmr == 510:
+        #     break
         # cv2.imshow('frame', frame)
         # cv2.waitKey(0)
 

@@ -75,3 +75,9 @@ def write_csv(results, output_path):
                             results[frame_nmr][car_id]['license plate']['text_score']))
         f.close()
         
+def write_csv2(results, output_path):
+    with open(output_path,'w') as f:
+        f.write(f'frame_num, car_id, car_bbox, plate_text, plate_bbox, plate_bbox_score, plate_text_score')
+        for frame_num in results.keys():
+            for car_id in results[frame_num].keys():
+                print(results[frame_num][car_id])

@@ -67,8 +67,8 @@ while True:
                                                                                   'text': text,
                                                                                   'text_score': text_score,
                                                                                   'plate_bbox_score':plate_box_score}}
-    if frame_num == 1000:
-        break
+    # if frame_num == 100:
+    #      break
     if not ret:
         print(f'Video {input_video} has ended')
         break
@@ -76,4 +76,5 @@ while True:
 # Release resources
 capture.release()
 cv2.destroyAllWindows()
-write_csv(video_data, 'out.csv')
+#print(video_data)
+write_csv(video_data, 'out.txt')
